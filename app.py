@@ -1,11 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+import os
 
-
-client = MongoClient()
-db = client.Playlister
+host = os.environ.get('MONGODB_URI', 'mongodb://<heroku_kh9x2wrs>:<bghbgh123->@ds117866.mlab.com:17866/heroku_kh9x2wrs')
+client = MongoClient(host=f'{host}?retryWrites=false')
+db = client.get_default_database()
 playlists = db.playlists
+
+# client = MongoClient()
+# db = client.Playlister
+# playlists = db.playlists
 
 app = Flask(__name__)
 
@@ -63,5 +68,8 @@ def playlists_delete(playlist_id):
     
 
 
+# if __name__ == '__main__':
+#     app.run(debug=True)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+  app.run(debug=True, host='0.0.0.0', port=os.environ.get('PORT', 5000))
